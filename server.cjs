@@ -7,10 +7,11 @@ app.use(cors());
 app.use(express.json());
 
 const db = mysql.createConnection({
-  host: "localhost",
+  host: "thomas.proxy.rlwy.net",
+  port: 50315,
   user: "root",
-  password: "",
-  database: "sistema_contable",
+  password: "tSzTqKPyyskpfdPBJCjioJMotusueEvw",
+  database: "railway",
 });
 
 db.connect((err) => {
