@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import Login from "./pages/Login"; // 1. Importación del Login
+import Login from "./pages/login"; // 1. Importación del Login
 import Inicio from "./pages/Inicio";
 import DiarioGeneral from "./pages/DiarioGeneral";
 import Mayorizar from "./pages/Mayorizar";
