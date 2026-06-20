@@ -9,83 +9,96 @@ import AdminDashboard from "./pages/AdminDashboard";
 export default function App() {
   return (
     <BrowserRouter>
-      {/* 📱 INYECCIÓN CSS MÚLTIPLES DISPOSITIVOS (MÓVIL, TABLET, PC) */}
+      {/* 📱 INYECCIÓN CSS RESPONSIVA AVANZADA MULTIDISPOSITIVO */}
       <style>{`
-        /* --- ESTILOS ADAPTATIVOS PARA PANTALLAS MÓVILES (MÁXIMO 768PX) --- */
+        /* --- SOLO SE APLICA EN DISPOSITIVOS MÓVILES (MÁXIMO 768PX) --- */
         @media (max-width: 768px) {
           
-          /* 1. CORRECCIÓN DEL LOGIN (Enlaces inferiores en fila que se cortaban en tu pantalla) */
-          div[style*="display: flex"][style*="justify-content: space-between"] {
-            flex-direction: column !important;
-            align-items: center !important;
-            gap: 12px !important;
-            text-align: center !important;
-          }
-
-          /* 2. FORMULARIOS RESPONSIVOS (Pasan de columnas horizontales a apilarse verticalmente) */
-          div[style*="display: grid"], 
-          div[style*="display: flex"][style*="gap: 12px"] {
+          /* 1. CORRECCIÓN DE FORMULARIOS INTERNOS Y CONTENEDORES DE CONTENIDO (Evita romper el header) */
+          /* Selecciona grillas de formularios de registro y cajas de estados contables */
+          div[style*="display: grid"][style*="grid-template-columns"]:not([style*="1fr 1fr"]),
+          div[style*="display: flex"][style*="gap: 12px"]:not([style*="background: #0f172a"]):not([style*="background:#0f172a"]) {
             grid-template-columns: 1fr !important;
             flex-direction: column !important;
             align-items: stretch !important;
             gap: 14px !important;
           }
 
-          /* 3. BOTONES E INPUTS TÁCTILES */
-          button, input, select {
-            width: 100% !important;
-            box-sizing: border-box !important;
-            height: 44px !important; /* Altura perfecta recomendada para presionar con el dedo */
+          /* 2. PROTECCIÓN EXCLUSIVA PARA EL MENÚ SUPERIOR (Evita lo que pasó en la imagen) */
+          /* Mantiene el header azul con los botones pequeños en su fila correspondiente */
+          div[style*="background: #0f172a"], 
+          div[style*="background:#0f172a"],
+          nav, 
+          header {
+            flex-direction: row !important;
+            flex-wrap: wrap !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            padding: 12px 16px !important;
+            text-align: left !important;
           }
 
-          /* Excepción para botones pequeños dentro de filas o tablas (Para que no midan 100%) */
-          td button, table button, div[style*="text-align: right"] button, span[style*="cursor"] {
+          /* Reducción sutil del tamaño de botones del menú para que quepan todos juntos */
+          div[style*="background: #0f172a"] button,
+          div[style*="background:#0f172a"] button {
             width: auto !important;
             height: auto !important;
-            display: inline-block !important;
+            padding: 6px 12px !important;
+            font-size: 12px !important;
+            display: inline-flex !important;
           }
 
-          /* 4. PROTECCIÓN MÁGICA DE TABLAS Y REPORTES FINANCIEROS (Scroll lateral con el dedo) */
-          /* Esto repara automáticamente Diario General, Mayorización, Balance y Estado de Resultados */
+          /* 3. ARREGLO DE ENLACES DEL LOGIN */
+          /* Colapsa verticalmente los links inferiores del login de tu captura anterior */
+          div[style*="max-width: 420px"] div[style*="display: flex"] {
+            flex-direction: column !important;
+            align-items: center !important;
+            gap: 12px !important;
+          }
+
+          /* 4. ENTRADAS DE TEXTO Y BOTONES OPERATIVOS GRANDES */
+          input, select, div:not([style*="background"]) > button:not([style*="padding: 6px"]) {
+            width: 100% !important;
+            box-sizing: border-box !important;
+            height: 44px !important;
+          }
+
+          /* 5. SISTEMA DE DESLIZAMIENTO MÁGICO PARA LAS TABLAS Y REPORTES FINANCIEROS */
+          /* Hace que DiarioGeneral, Mayorizar, Balance y Resultados permitan scroll con el dedo sin romperse */
           div[style*="border: 1px solid"], 
-          div[style*="border-radius: 8px"], 
-          div[style*="overflow: hidden"] {
+          div[style*="border-radius: 8px"],
+          div[style*="border-radius:12px"] {
             width: 100% !important;
             overflow-x: auto !important;
             display: block !important;
-            -webkit-overflow-scrolling: touch; /* Suaviza el scroll en iPhones */
+            -webkit-overflow-scrolling: touch;
           }
 
-          /* Mantiene la grilla interna de las tablas legible sin amontonar las columnas */
-          div[style*="display: grid"][style*="grid-template-columns"] {
+          /* Fuerza que el bloque de columnas de la tabla mantenga un ancho mínimo legible al deslizar */
+          div[style*="border: 1px solid"] div[style*="display: grid"],
+          div[style*="border-radius: 8px"] div[style*="display: grid"] {
             min-width: 720px !important; 
           }
 
-          /* 5. SECCIONES DE ENCABEZADOS DE EMPRESAS */
-          div[style*="justify-content: space-between"][style*="padding"] {
+          /* 6. RESPONSIVIDAD PARA LAS TARJETAS DE EMPRESAS (Inicio.jsx) */
+          /* Ajusta la lista de empresas creadas para que los botones queden abajo ordenadamente */
+          div[style*="padding: 16px 24px"] {
             flex-direction: column !important;
-            text-align: center !important;
-            gap: 14px !important;
+            align-items: flex-start !important;
+            padding: 16px !important;
+          }
+          div[style*="padding: 16px 24px"] div[style*="text-align: right"] {
+            width: 100% !important;
+            text-align: left !important;
+            margin-top: 10px !important;
           }
 
-          /* Ajuste de márgenes internos de tarjetas para celulares */
-          div[style*="padding: 40px"], div[style*="padding: 24px"] {
-            padding: 20px 16px !important;
-          }
-
-          /* Evita títulos gigantes desproporcionados */
-          h1 { font-size: 22px !important; }
-          h2 { font-size: 19px !important; }
+          /* Reducción de textos gigantes */
+          h1 { font-size: 20px !important; }
+          h2 { font-size: 18px !important; }
         }
 
-        /* --- MANTENER ESTILOS LÍNEALES EN ELEMENTOS INTERNOS EXCLUSIVOS --- */
-        @media (max-width: 768px) {
-          .no-colapsar {
-            flex-direction: row !important;
-          }
-        }
-
-        /* --- OPTIMIZACIÓN LIMPIA PARA CUANDO IMPRIMAS EN PDF --- */
+        /* --- CONFIGURACIÓN LIMPIA PARA CUANDO EXPORTES A PDF/IMPRESION --- */
         @media print {
           .no-print { display: none !important; }
           body { background: white !important; color: black !important; }
