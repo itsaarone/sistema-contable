@@ -18,20 +18,20 @@ export default function Login() {
     setMensaje("");
     try {
       if (vista === "login") {
-        const res = await axios.post("http://localhost:3001/login", { usuario: form.usuario, password: form.password });
+        const res = await axios.post("https://sistema-contable-backend-f67j.onrender.com/login", { usuario: form.usuario, password: form.password });
         if (res.data.success) {
           localStorage.setItem("usuarioLogueado", JSON.stringify(res.data.user));
           navigate("/inicio"); // Redirige a la gestión de empresas
         }
       } else if (vista === "registro") {
-        const res = await axios.post("http://localhost:3001/register", form);
+        const res = await axios.post("https://sistema-contable-backend-f67j.onrender.com/register", form);
         alert(res.data.message);
         limpiarFormyCambiarVista("login");
       } else if (vista === "forgotUser") {
-        const res = await axios.post("http://localhost:3001/forgot-username", { email: form.email });
+        const res = await axios.post("https://sistema-contable-backend-f67j.onrender.com/forgot-username", { email: form.email });
         setMensaje(res.data.message);
       } else if (vista === "forgotPass") {
-        const res = await axios.post("http://localhost:3001/forgot-password", { usuario: form.usuario, email: form.email });
+        const res = await axios.post("https://sistema-contable-backend-f67j.onrender.com/forgot-password", { usuario: form.usuario, email: form.email });
         setMensaje(res.data.message);
       }
     } catch (error) {

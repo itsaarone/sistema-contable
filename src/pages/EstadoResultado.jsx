@@ -16,7 +16,7 @@ export default function EstadoResultado() {
     const empresaActiva = JSON.parse(localStorage.getItem("empresaActiva"));
     if (!empresaActiva) { navigate("/"); return; }
     setEmpresa(empresaActiva);
-    axios.get(`http://localhost:3001/movimientos/${empresaActiva.id}`)
+    axios.get(`https://sistema-contable-backend-f67j.onrender.com/movimientos/${empresaActiva.id}`)
       .then((res) => procesarResultados(res.data))
       .catch((err) => console.error("Error al cargar Estado de Resultados:", err));
   }, [navigate]);

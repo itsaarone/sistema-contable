@@ -11,7 +11,7 @@ export default function Inicio() {
 
   const cargarEmpresas = async () => {
     try {
-      const res = await axios.get("http://localhost:3001/empresas");
+      const res = await axios.get("https://sistema-contable-backend-f67j.onrender.com/empresas");
       setEmpresas(res.data);
     } catch (error) {
       console.error("Error al cargar empresas:", error);
@@ -46,10 +46,10 @@ export default function Inicio() {
         return;
       }
       if (editando) {
-        await axios.put(`http://localhost:3001/empresas/${editando}`, form);
+        await axios.put(`https://sistema-contable-backend-f67j.onrender.com/empresas/${editando}`, form);
         setEditando(null);
       } else {
-        await axios.post("http://localhost:3001/empresas", form);
+        await axios.post("https://sistema-contable-backend-f67j.onrender.com/empresas", form);
       }
       setForm({ nombre: "", periodo_inicio: "", periodo_fin: "" });
       cargarEmpresas();
@@ -61,7 +61,7 @@ export default function Inicio() {
   const eliminarEmpresa = async (id) => {
     if (!window.confirm("¿Está seguro de eliminar esta empresa y todos sus registros?")) return;
     try {
-      await axios.delete(`http://localhost:3001/empresas/${id}`);
+      await axios.delete(`https://sistema-contable-backend-f67j.onrender.com/empresas/${id}`);
       cargarEmpresas();
     } catch (error) {
       console.error("Error al eliminar empresa:", error);

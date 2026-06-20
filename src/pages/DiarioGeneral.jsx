@@ -135,7 +135,7 @@ export default function DiarioGeneral() {
 
   const cargarMovimientos = async (empresaId) => {
     try {
-      const res = await axios.get(`http://localhost:3001/movimientos/${empresaId}`);
+      const res = await axios.get(`https://sistema-contable-backend-f67j.onrender.com/movimientos/${empresaId}`);
       const refsGuardadas = JSON.parse(localStorage.getItem("referencias_mov") || "{}");
       setMovimientos(res.data.map((m) => ({
         ...m,
@@ -196,7 +196,7 @@ export default function DiarioGeneral() {
       tipoCuenta: validarCuenta(form.codigoCuenta),
     };
     try {
-      const res = await axios.post("http://localhost:3001/movimientos", payload);
+      const res = await axios.post("https://sistema-contable-backend-f67j.onrender.com/movimientos", payload);
       if (form.referencia && form.referencia.trim()) {
         const savedId = res.data?.id || editando;
         if (savedId) {
@@ -220,7 +220,7 @@ export default function DiarioGeneral() {
 
   const eliminarMovimiento = async (id) => {
     if (window.confirm("¿Eliminar este registro?")) {
-      try { await axios.delete(`http://localhost:3001/movimientos/${id}`); await cargarMovimientos(empresa.id); }
+      try { await axios.delete(`https://sistema-contable-backend-f67j.onrender.com/movimientos/${id}`); await cargarMovimientos(empresa.id); }
       catch (e) { console.log("Error al eliminar:", e); }
     }
   };

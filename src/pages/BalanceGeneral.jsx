@@ -47,7 +47,7 @@ export default function BalanceGeneral() {
     const empresaActiva = JSON.parse(localStorage.getItem("empresaActiva"));
     if (!empresaActiva) { navigate("/"); return; }
     setEmpresa(empresaActiva);
-    axios.get(`http://localhost:3001/movimientos/${empresaActiva.id}`)
+    axios.get(`https://sistema-contable-backend-f67j.onrender.com/movimientos/${empresaActiva.id}`)
       .then((res) => setMovimientos(res.data))
       .catch((err) => console.error("Error al cargar balance:", err));
   }, [navigate]);

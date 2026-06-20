@@ -14,7 +14,7 @@ export default function Mayorizar() {
     const empresaActiva = JSON.parse(localStorage.getItem("empresaActiva"));
     if (empresaActiva) {
       setEmpresa(empresaActiva);
-      axios.get(`http://localhost:3001/movimientos/${empresaActiva.id}`)
+      axios.get(`https://sistema-contable-backend-f67j.onrender.com/movimientos/${empresaActiva.id}`)
         .then((res) => setMovimientos(res.data))
         .catch((err) => console.log("Error:", err));
     } else { navigate("/"); }
