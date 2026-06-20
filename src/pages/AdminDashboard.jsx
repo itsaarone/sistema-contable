@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import axios from "react-router-dom"; // Nota: Usamos axios instalado
 
 const API = "https://sistema-contable-backend-f67j.onrender.com";
 
@@ -14,10 +14,28 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     const sesion = localStorage.getItem("usuarioLogueado");
-    if (!sesion) { navigate("/"); return; }
-    const u = JSON.parse(sesion);
-    if (u.usuario !== "admin") { navigate("/inicio"); return; }
-    cargarDatos();
+    
+    if (!sesion) {
+      console.log("Sin sesión activa. Redirigiendo al login...");
+      navigate("/");
+      return;
+    }
+
+    try {
+      const u = JSON.parse(sesion);
+      // Validamos que el usuario exista y sea estrictamente 'admin'
+      if (!u || u.usuario !== "admin") {
+        console.log("Acceso denegado. Redirigiendo a inicio...");
+        navigate("/inicio");
+        return;
+      }
+      
+      // Si pasa los filtros, cargamos los datos de la API
+      cargarDatos();
+    } catch (e) {
+      console.error("Error al procesar la sesión:", e);
+      navigate("/");
+    }
   }, [navigate]);
 
   const cargarDatos = async () => {
@@ -28,20 +46,24 @@ export default function AdminDashboard() {
         axios.get(`${API}/admin/usuarios`),
       ]);
       setStats(statsRes.data);
+      // Filtramos para no mostrar al mismo administrador en la lista de gestión
       setUsuarios(usuariosRes.data.filter(u => u.usuario !== "admin"));
-    } catch (e) { console.error(e); }
+    } catch (e) { 
+      console.error("Error al cargar los datos del servidor:", e); 
+    }
     setCargando(false);
   };
 
   const crearUsuario = async () => {
     if (!form.usuario || !form.email || !form.password) {
-      setMensaje({ texto: "Todos los campos son obligatorios", tipo: "error" }); return;
+      setMensaje({ texto: "Todos los campos son obligatorios", tipo: "error" }); 
+      return;
     }
     try {
       await axios.post(`${API}/admin/usuarios`, form);
       setMensaje({ texto: "Usuario creado exitosamente", tipo: "ok" });
       setForm({ usuario: "", email: "", password: "" });
-      cargarDatos();
+      cargarDatos(); // Recarga la lista y estadísticas automáticamente
     } catch (e) {
       setMensaje({ texto: e.response?.data?.message || "Error al crear usuario", tipo: "error" });
     }
@@ -52,9 +74,11 @@ export default function AdminDashboard() {
     if (!window.confirm(`¿Eliminar a "${nombre}" y todas sus empresas y datos?`)) return;
     try {
       await axios.delete(`${API}/admin/usuarios/${id}`);
-      setMensaje({ texto: "Usuario eliminado", tipo: "ok" });
-      cargarDatos();
-    } catch (e) { setMensaje({ texto: "Error al eliminar", tipo: "error" }); }
+      setMensaje({ texto: "Usuario eliminado correctamente", tipo: "ok" });
+      cargarDatos(); // Recarga la lista automáticamente
+    } catch (e) { 
+      setMensaje({ texto: "Error al eliminar usuario", tipo: "error" }); 
+    }
     setTimeout(() => setMensaje({ texto: "", tipo: "" }), 3000);
   };
 
@@ -118,7 +142,7 @@ export default function AdminDashboard() {
         <div style={s.card}>
           <h2 style={s.cardTitle}>👥 Usuarios del Sistema</h2>
           {cargando ? (
-            <p style={{ color: "#94a3b8", textAlign: "center", padding: "20px" }}>Cargando...</p>
+            <p style={{ color: "#94a3b8", textAlign: "center", padding: "20px" }}>Cargando datos...</p>
           ) : usuarios.length === 0 ? (
             <p style={{ color: "#94a3b8", textAlign: "center", padding: "20px" }}>No hay usuarios registrados aún.</p>
           ) : (
